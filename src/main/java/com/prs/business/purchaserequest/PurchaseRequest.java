@@ -1,6 +1,7 @@
 package com.prs.business.purchaserequest;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,10 +16,11 @@ import com.prs.business.user.User;
 public class PurchaseRequest {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@ManyToOne  //many purchase requests can be provided by one user // based off primary keys in the database.
-	@JoinColumn(name = "userID")	
+	@ManyToOne // many purchase requests can be provided by one user // based off primary keys
+				// in the database.
+	@JoinColumn(name = "userID")
 	private User user;
 	private String description;
 	private String justification;
@@ -26,7 +28,7 @@ public class PurchaseRequest {
 	private String deliveryMode;
 	private String status;
 	private double total;
-	private LocalDate submittedDate;
+	private LocalDateTime submittedDate;
 	private String reasonForRejection;
 
 	public static final String STATUS_OF_NEW = "New";
@@ -34,13 +36,13 @@ public class PurchaseRequest {
 	public static final String STATUS_OF_EDIT = "Edit";
 	public static final String STATUS_OF_APPROVED = "Approved";
 	public static final String STATUS_OF_REJECTED = "Rejected";
-	
+
 	public PurchaseRequest() {
 		super();
 	}
 
 	public PurchaseRequest(int id, User user, String description, String justification, LocalDate dateNeeded,
-			String deliveryMode, String status, double total, LocalDate submittedDate, String reasonForRejection) {
+			String deliveryMode, String status, double total, LocalDateTime submittedDate, String reasonForRejection) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -54,103 +56,81 @@ public class PurchaseRequest {
 		this.reasonForRejection = reasonForRejection;
 	}
 
-
-
-
 	public int getId() {
 		return id;
 	}
-
 
 	public void setId(int id) {
 		this.id = id;
 	}
 
-
 	public User getUser() {
 		return user;
 	}
-
 
 	public void setUser(User user) {
 		this.user = user;
 	}
 
-
 	public String getDescription() {
 		return description;
 	}
-
 
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
-
 	public String getJustification() {
 		return justification;
 	}
-
 
 	public void setJustification(String justification) {
 		this.justification = justification;
 	}
 
-
 	public LocalDate getDateNeeded() {
 		return dateNeeded;
 	}
-
 
 	public void setDateNeeded(LocalDate dateNeeded) {
 		this.dateNeeded = dateNeeded;
 	}
 
-
 	public String getDeliveryMode() {
 		return deliveryMode;
 	}
-
 
 	public void setDeliveryMode(String deliveryMode) {
 		this.deliveryMode = deliveryMode;
 	}
 
-
 	public String getStatus() {
 		return status;
 	}
-
 
 	public void setStatus(String status) {
 		this.status = status;
 	}
 
-
 	public double getTotal() {
 		return total;
 	}
-
 
 	public void setTotal(double total) {
 		this.total = total;
 	}
 
-
-	public LocalDate getSubmittedDate() {
+	public LocalDateTime getSubmittedDate() {
 		return submittedDate;
 	}
 
-
-	public void setSubmittedDate(LocalDate submittedDate) {
+	public void setSubmittedDate(LocalDateTime submittedDate) {
 		this.submittedDate = submittedDate;
 	}
-
 
 	public String getReasonForRejection() {
 		return reasonForRejection;
 	}
-
 
 	public void setReasonForRejection(String reasonForRejection) {
 		this.reasonForRejection = reasonForRejection;

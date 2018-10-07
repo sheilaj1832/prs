@@ -31,7 +31,7 @@ public class PurchaseRequestController {
 			try {
 				return JsonResponse.getInstance(purchaseRequestRepository.findAll());
 			} catch (Exception e) {
-				return JsonResponse.getErrorInstance("PurchaseRequest list failure:" + e.getMessage(), e);
+				return JsonResponse.getErrorInstance("Purchase request list failure:" + e.getMessage(), e);
 			}
 		}
 
@@ -72,16 +72,20 @@ public class PurchaseRequestController {
 		public @ResponseBody JsonResponse updatePurchaseRequestStatus(@RequestBody PurchaseRequest purchaseRequest) {
 			if (purchaseRequest.getTotal() <= 50) {
 				purchaseRequest.setStatus(PurchaseRequest.STATUS_OF_APPROVED);
-				return savePurchaseRequest(purchaseRequest);			
 			}	
 			else {
 				purchaseRequest.setStatus(PurchaseRequest.STATUS_OF_REVIEW);
-				return savePurchaseRequest(purchaseRequest);
 			}
-			purchaseRequest.setDate(LocalDateTime.now());
+			purchaseRequest.setSubmittedDate(PurchaseRequest.LocalDateTime.now());
+			return savePurchaseRequest(purchaseRequest);
 		}
-		@PostMapping("/ApprovePurchaseRequest")
-		public @ResponseBody JsonResponse getAllPurchaseRequestStatus_Of_Review(@RequestBody PurchaseRequest purchaseRequest) {
+		@GetMapping("/ApprovePurchaseRequest")
+		public @ResponseBody JsonResponse reviewPurchaseRequests(@RequestBody PurchaseRequest purchaseRequest) {
+			try {
+				return JsonResponse.getInstance(purchaseRequestRepository.findAll(PurchaseRequest.STATUS_OF_REVIEW));
+			} catch (Exception e) {
+				return JsonResponse.getErrorInstance("PurchaseRequest list failure:" + e.getMessage(), e);
+			};
 		
 		}		
 		@PostMapping("/Remove")
@@ -95,3 +99,4 @@ public class PurchaseRequestController {
 		}
 	}
 
+				return savePurchaseRequest(purchaseRequest);			
