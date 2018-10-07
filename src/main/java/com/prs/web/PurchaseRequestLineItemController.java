@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.prs.business.purchaserequest.PurchaseRequestLineItem;
 import com.prs.business.purchaserequest.PurchaseRequestLineItemRepository;
+import com.prs.util.JsonResponse;
 
 @Controller
 @RequestMapping("/PurchaseRequestLineItems")
@@ -21,28 +24,57 @@ public class PurchaseRequestLineItemController {
 	
 	@Autowired
 	private PurchaseRequestLineItemRepository purchaseRequestLineItemRepository;
-	
+
 	@GetMapping("/List")
-	public @ResponseBody Iterable<PurchaseRequestLineItem> getAllPurchaseRequestLineItems() { 
-		Iterable<PurchaseRequestLineItem> purchaseRequestLineItems = purchaseRequestLineItemRepository.findAll();
-		return purchaseRequestLineItems;
+	public @ResponseBody JsonResponse getAllPurchaseRequestLineItems() {
+		try {
+			return JsonResponse.getInstance(purchaseRequestLineItemRepository.findAll());
+		} catch (Exception e) {
+			return JsonResponse.getErrorInstance("Purchase request line item list failure:" + e.getMessage(), e);
+		}
 	}
-	@GetMapping("/Get")
-	public @ResponseBody Optional<PurchaseRequestLineItem> getPurchaseRequestLineItem(@RequestParam int id) { 
-		Optional<PurchaseRequestLineItem> purchaseRequestLineItem = purchaseRequestLineItemRepository.findById(id);
-		return purchaseRequestLineItem;
+
+	@GetMapping("/Get/{id}")
+	public @ResponseBody JsonResponse getPurchaseRequestLineItem(@PathVariable int id) {
+		try {
+			Optional<PurchaseRequestLineItem> purchaseRequestLineItem = purchaseRequestLineItemRepository.findById(id);
+			if (purchaseRequestLineItem.isPresent())
+				return JsonResponse.getInstance(purchaseRequestLineItem.get());
+			else
+				return JsonResponse.getErrorInstance("Purchase request line item not found for id: " + id, null);
+		} catch (Exception e) {
+			return JsonResponse.getErrorInstance("Error getting purchase request line item:  " + e.getMessage(), null);
+		}
 	}
+
 	@PostMapping("/Add")
-	public @ResponseBody PurchaseRequestLineItem addPurchaseRequestLineItem(@RequestBody PurchaseRequestLineItem purchaseRequestLineItem) {
-		return purchaseRequestLineItemRepository.save(purchaseRequestLineItem);
+	public @ResponseBody JsonResponse addPurchaseRequestLineItem(@RequestBody PurchaseRequestLineItem purchaseRequestLineItem) {
+		return savePurchaseRequestLineItem(purchaseRequestLineItem);
 	}
+
 	@PostMapping("/Change")
-	public @ResponseBody PurchaseRequestLineItem updatePurchaseRequestLineItem(@RequestBody PurchaseRequestLineItem purchaseRequestLineItem) {
-		return purchaseRequestLineItemRepository.save(purchaseRequestLineItem);
+	public @ResponseBody JsonResponse updatePurchaseRequestLineItem(@RequestBody PurchaseRequestLineItem purchaseRequestLineItem) {
+		return savePurchaseRequestLineItem(purchaseRequestLineItem);
 	}
+
+	private @ResponseBody JsonResponse savePurchaseRequestLineItem(@RequestBody PurchaseRequestLineItem purchaseRequestLineItem) {
+		try {
+			purchaseRequestLineItemRepository.save(purchaseRequestLineItem);
+			return JsonResponse.getInstance(purchaseRequestLineItem);
+		} catch (DataIntegrityViolationException ex) {
+			return JsonResponse.getErrorInstance(ex.getRootCause().toString(), ex);
+		} catch (Exception ex) {
+			return JsonResponse.getErrorInstance(ex.getMessage(), ex);
+		}
+	}
+
 	@PostMapping("/Remove")
-	public @ResponseBody String removePurchaseRequest(@RequestBody PurchaseRequestLineItem purchaseRequestLineItem) {
-		purchaseRequestLineItemRepository.delete(purchaseRequestLineItem);
-		return "purchase request deleted";
+	public @ResponseBody JsonResponse removePurchaseRequestLineItem(@RequestBody PurchaseRequestLineItem purchaseRequestLineItem) {
+		try {
+			purchaseRequestLineItemRepository.delete(purchaseRequestLineItem);
+			return JsonResponse.getInstance(purchaseRequestLineItem);
+		} catch (Exception ex) {
+			return JsonResponse.getErrorInstance(ex.getMessage(), ex);
+		}
 	}
 }

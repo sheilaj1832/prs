@@ -30,10 +30,10 @@ public class PurchaseRequest {
 	private String reasonForRejection;
 
 	public static final String STATUS_OF_NEW = "New";
-	private static final String STATUS_OF_REVIEW = "Review";
-	private static final String STATUS_OF_EDIT = "Edit";
-	private static final String STATUS_OF_APPROVED = "Approved";
-	private static final String STATUS_OF_REJECTED = "Rejected";
+	public static final String STATUS_OF_REVIEW = "Review";
+	public static final String STATUS_OF_EDIT = "Edit";
+	public static final String STATUS_OF_APPROVED = "Approved";
+	public static final String STATUS_OF_REJECTED = "Rejected";
 	
 	public PurchaseRequest() {
 		super();
