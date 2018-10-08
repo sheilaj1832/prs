@@ -22,81 +22,82 @@ import com.prs.util.JsonResponse;
 @Controller
 @RequestMapping("/PurchaseRequests")
 public class PurchaseRequestController {
-	
-		@Autowired
-		private PurchaseRequestRepository purchaseRequestRepository;
 
-		@GetMapping("/List")
-		public @ResponseBody JsonResponse getAllPurchaseRequests() {
-			try {
-				return JsonResponse.getInstance(purchaseRequestRepository.findAll());
-			} catch (Exception e) {
-				return JsonResponse.getErrorInstance("Purchase request list failure:" + e.getMessage(), e);
-			}
-		}
+	@Autowired
+	private PurchaseRequestRepository purchaseRequestRepository;
 
-		@GetMapping("/Get/{id}")
-		public @ResponseBody JsonResponse getPurchaseRequest(@PathVariable int id) {
-			try {
-				Optional<PurchaseRequest> purchaseRequest = purchaseRequestRepository.findById(id);
-				if (purchaseRequest.isPresent())
-					return JsonResponse.getInstance(purchaseRequest.get());
-				else
-					return JsonResponse.getErrorInstance("Purchase request not found for id: " + id, null);
-			} catch (Exception e) {
-				return JsonResponse.getErrorInstance("Error getting purchase request:  " + e.getMessage(), null);
-			}
-		}
-
-		@PostMapping("/Add")
-		public @ResponseBody JsonResponse addPurchaseRequest(@RequestBody PurchaseRequest purchaseRequest) {
-			return savePurchaseRequest(purchaseRequest);
-		}
-
-		@PostMapping("/Change")
-		public @ResponseBody JsonResponse updatePurchaseRequest(@RequestBody PurchaseRequest purchaseRequest) {
-			return savePurchaseRequest(purchaseRequest);
-		}
-
-		private @ResponseBody JsonResponse savePurchaseRequest(@RequestBody PurchaseRequest purchaseRequest) {
-			try {
-				purchaseRequestRepository.save(purchaseRequest);
-				return JsonResponse.getInstance(purchaseRequest);
-			} catch (DataIntegrityViolationException ex) {
-				return JsonResponse.getErrorInstance(ex.getRootCause().toString(), ex);
-			} catch (Exception ex) {
-				return JsonResponse.getErrorInstance(ex.getMessage(), ex);
-			}
-		}
-		@PostMapping("/SubmitForReview")
-		public @ResponseBody JsonResponse updatePurchaseRequestStatus(@RequestBody PurchaseRequest purchaseRequest) {
-			if (purchaseRequest.getTotal() <= 50) {
-				purchaseRequest.setStatus(PurchaseRequest.STATUS_OF_APPROVED);
-			}	
-			else {
-				purchaseRequest.setStatus(PurchaseRequest.STATUS_OF_REVIEW);
-			}
-			purchaseRequest.setSubmittedDate(PurchaseRequest.LocalDateTime.now());
-			return savePurchaseRequest(purchaseRequest);
-		}
-		@GetMapping("/ApprovePurchaseRequest")
-		public @ResponseBody JsonResponse reviewPurchaseRequests(@RequestBody PurchaseRequest purchaseRequest) {
-			try {
-				return JsonResponse.getInstance(purchaseRequestRepository.findAll(PurchaseRequest.STATUS_OF_REVIEW));
-			} catch (Exception e) {
-				return JsonResponse.getErrorInstance("PurchaseRequest list failure:" + e.getMessage(), e);
-			};
-		
-		}		
-		@PostMapping("/Remove")
-		public @ResponseBody JsonResponse removePurchaseRequest(@RequestBody PurchaseRequest purchaseRequest) {
-			try {
-				purchaseRequestRepository.delete(purchaseRequest);
-				return JsonResponse.getInstance(purchaseRequest);
-			} catch (Exception ex) {
-				return JsonResponse.getErrorInstance(ex.getMessage(), ex);
-			}
+	@GetMapping("/List")
+	public @ResponseBody JsonResponse getAllPurchaseRequests() {
+		try {
+			return JsonResponse.getInstance(purchaseRequestRepository.findAll());
+		} catch (Exception e) {
+			return JsonResponse.getErrorInstance("Purchase request list failure:" + e.getMessage(), e);
 		}
 	}
 
-				return savePurchaseRequest(purchaseRequest);			
+	@GetMapping("/Get/{id}")
+	public @ResponseBody JsonResponse getPurchaseRequest(@PathVariable int id) {
+		try {
+			Optional<PurchaseRequest> purchaseRequest = purchaseRequestRepository.findById(id);
+			if (purchaseRequest.isPresent())
+				return JsonResponse.getInstance(purchaseRequest.get());
+			else
+				return JsonResponse.getErrorInstance("Purchase request not found for id: " + id, null);
+		} catch (Exception e) {
+			return JsonResponse.getErrorInstance("Error getting purchase request:  " + e.getMessage(), null);
+		}
+	}
+
+	@PostMapping("/Add")
+	public @ResponseBody JsonResponse addPurchaseRequest(@RequestBody PurchaseRequest purchaseRequest) {
+		return savePurchaseRequest(purchaseRequest);
+	}
+
+	@PostMapping("/Change")
+	public @ResponseBody JsonResponse updatePurchaseRequest(@RequestBody PurchaseRequest purchaseRequest) {
+		return savePurchaseRequest(purchaseRequest);
+	}
+
+	private @ResponseBody JsonResponse savePurchaseRequest(@RequestBody PurchaseRequest purchaseRequest) {
+		try {
+			purchaseRequestRepository.save(purchaseRequest);
+			return JsonResponse.getInstance(purchaseRequest);
+		} catch (DataIntegrityViolationException ex) {
+			return JsonResponse.getErrorInstance(ex.getRootCause().toString(), ex);
+		} catch (Exception ex) {
+			return JsonResponse.getErrorInstance(ex.getMessage(), ex);
+		}
+	}
+
+	@PostMapping("/SubmitForReview")
+	public @ResponseBody JsonResponse updatePurchaseRequestStatus(@RequestBody PurchaseRequest purchaseRequest) {
+		if (purchaseRequest.getTotal() <= 50) {
+			purchaseRequest.setStatus(PurchaseRequest.STATUS_OF_APPROVED);
+		} else {
+			purchaseRequest.setStatus(PurchaseRequest.STATUS_OF_REVIEW);
+		}
+		purchaseRequest.setSubmittedDate(PurchaseRequest.LocalDateTime.now());
+		return savePurchaseRequest(purchaseRequest);
+	}
+
+	@GetMapping("/ApprovePurchaseRequest")
+	public @ResponseBody JsonResponse reviewPurchaseRequests(@RequestBody PurchaseRequest purchaseRequest) {
+		try {
+			return JsonResponse.getInstance(purchaseRequestRepository.findAll(PurchaseRequest.STATUS_OF_REVIEW));
+		} catch (Exception e) {
+			return JsonResponse.getErrorInstance("PurchaseRequest list failure:" + e.getMessage(), e);
+		}
+		;
+
+	}
+
+	@PostMapping("/Remove")
+	public @ResponseBody JsonResponse removePurchaseRequest(@RequestBody PurchaseRequest purchaseRequest) {
+		try {
+			purchaseRequestRepository.delete(purchaseRequest);
+			return JsonResponse.getInstance(purchaseRequest);
+		} catch (Exception ex) {
+			return JsonResponse.getErrorInstance(ex.getMessage(), ex);
+		}
+	}
+}
