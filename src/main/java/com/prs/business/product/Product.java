@@ -15,7 +15,8 @@ public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@ManyToOne  //many products can be provided by one vendor // based off primary keys in the database.
+	@ManyToOne // many products can be provided by one vendor // based off primary keys in the
+				// database.
 	@JoinColumn(name = "vendorID")
 	private Vendor vendor;
 	private String partNumber;
@@ -31,6 +32,16 @@ public class Product {
 	public Product(int id, Vendor vendor, String partNumber, String name, double price, String unit, String photoPath) {
 		super();
 		this.id = id;
+		this.vendor = vendor;
+		this.partNumber = partNumber;
+		this.name = name;
+		this.price = price;
+		this.unit = unit;
+		this.photoPath = photoPath;
+	}
+
+	public Product(Vendor vendor, String partNumber, String name, double price, String unit, String photoPath) {
+		super();
 		this.vendor = vendor;
 		this.partNumber = partNumber;
 		this.name = name;

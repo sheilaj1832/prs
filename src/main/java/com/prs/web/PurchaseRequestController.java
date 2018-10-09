@@ -87,10 +87,7 @@ public class PurchaseRequestController {
 		} catch (Exception e) {
 			return JsonResponse.getErrorInstance("PurchaseRequest list failure:" + e.getMessage(), e);
 		}
-		;
-
 	}
-
 	@PostMapping("/Remove")
 	public @ResponseBody JsonResponse removePurchaseRequest(@RequestBody PurchaseRequest purchaseRequest) {
 		try {

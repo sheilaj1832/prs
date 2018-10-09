@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.prs.business.product.Product;
+import com.prs.business.vendor.Vendor;
 
 @Entity
 public class PurchaseRequestLineItem {
@@ -27,7 +28,7 @@ public class PurchaseRequestLineItem {
 
 	private int quantity;
 
-	public PurchaseRequestLineItem(int id, PurchaseRequest purchaseRequest, Product product, String description,
+	public PurchaseRequestLineItem(int id, PurchaseRequest purchaseRequest, Product product, 
 			int quantity) {
 		super();
 		this.id = id;
@@ -35,8 +36,19 @@ public class PurchaseRequestLineItem {
 		this.product = product;
 		this.quantity = quantity;
 	}
+	public PurchaseRequestLineItem(PurchaseRequest purchaseRequest, Product product,
+			int quantity) {
+		super();
+		this.purchaseRequest = purchaseRequest;
+		this.product = product;
+		this.quantity = quantity;
+	}
+	
 	public PurchaseRequestLineItem() {
 		super();
+	}
+	public PurchaseRequestLineItem(Vendor vendor, Product product2, int i) {
+		// TODO Auto-generated constructor stub
 	}
 	public int getId() {
 		return id;

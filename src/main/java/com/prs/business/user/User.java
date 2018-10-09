@@ -9,7 +9,7 @@ import javax.persistence.Id;
 public class User {
 
 	@Id
-	@GeneratedValue(strategy =GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String userName;
 	private String password;
@@ -19,8 +19,7 @@ public class User {
 	private String email;
 	private boolean isReviewer;
 	private boolean isAdmin;
-	
-	
+
 	public User() {
 		super();
 	}
@@ -40,7 +39,7 @@ public class User {
 
 	public User(int id, String userName, String password, String firstName, String lastName, String phoneNumber,
 			String email, boolean isReviewer, boolean isAdmin) {
-		
+
 		this.id = id;
 		this.userName = userName;
 		this.password = password;

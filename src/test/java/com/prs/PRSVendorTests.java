@@ -35,16 +35,15 @@ public class PRSVendorTests extends PrsWebApplicationTests {
 		assertNotNull(vendorRepository.save(v1));
 		int id = v1.getId();
 
+		// Get vendor & validate name is correct
+		Optional<Vendor> v2 = vendorRepository.findById(id);
+		assertEquals(v2.get().getName(), "name");
 
-		//Get vendor & validate name is correct
-		Optional<Vendor> v2=vendorRepository.findById(id);
-		assertEquals(v2.get().getName(),"name");
-	
-		//Update the vendor
+		// Update the vendor
 		v2.get().setName("newName");
 		assertNotNull(vendorRepository.save(v2.get()));
-		
-		//Remove the vendor
+
+		// Remove the vendor
 		vendorRepository.delete(v2.get());
 		assertThat(!(vendorRepository.findById(id)).isPresent());
 
