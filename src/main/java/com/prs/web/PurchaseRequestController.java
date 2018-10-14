@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import com.prs.business.purchaserequest.PurchaseRequest;
 import com.prs.business.purchaserequest.PurchaseRequestRepository;
 import com.prs.util.JsonResponse;
 
+@CrossOrigin 
 @Controller
 @RequestMapping("/PurchaseRequests")
 public class PurchaseRequestController {
@@ -76,17 +78,27 @@ public class PurchaseRequestController {
 		} else {
 			purchaseRequest.setStatus(PurchaseRequest.STATUS_OF_REVIEW);
 		}
-		purchaseRequest.setSubmittedDate(PurchaseRequest.LocalDateTime.now());
+		purchaseRequest.setSubmittedDate(LocalDateTime.now());
 		return savePurchaseRequest(purchaseRequest);
 	}
 
-	@GetMapping("/ApprovePurchaseRequest")
-	public @ResponseBody JsonResponse reviewPurchaseRequests(@RequestBody PurchaseRequest purchaseRequest) {
-		try {
-			return JsonResponse.getInstance(purchaseRequestRepository.findAll(PurchaseRequest.STATUS_OF_REVIEW));
-		} catch (Exception e) {
-			return JsonResponse.getErrorInstance("PurchaseRequest list failure:" + e.getMessage(), e);
-		}
+//	@GetMapping("/ApprovePurchaseRequest")
+//	public @ResponseBody JsonResponse reviewPurchaseRequests(@RequestBody PurchaseRequest purchaseRequest) {
+//		try {
+//			// approver canot approve their own requests!!
+//			// get all PRs with status of 'review' and user NOT equal to signed on user
+//			return JsonResponse.getInstance(purchaseRequestRepository.findAll(PurchaseRequest.STATUS_OF_REVIEW));
+//		} catch (Exception e) {
+//			return JsonResponse.getErrorInstance("PurchaseRequest list failure:" + e.getMessage(), e);
+//
+//			try {
+//				purchaseRequestRepository.save(purchaseRequest);
+//				return JsonResponse.getInstance(purchaseRequest);
+//			} catch (DataIntegrityViolationException ex) {
+//				return JsonResponse.getErrorInstance(ex.getRootCause().toString(), ex);
+//			} catch (Exception ex) {
+//				return JsonResponse.getErrorInstance(ex.getMessage(), ex);
+//	}
 	}
 	@PostMapping("/Remove")
 	public @ResponseBody JsonResponse removePurchaseRequest(@RequestBody PurchaseRequest purchaseRequest) {

@@ -49,15 +49,15 @@ public class PRSPurchaseRequestLineItemTests extends PrsWebApplicationTests{
 		int id = prli1.getId();
 		
 		//Get user & validate userName is correct
-		Optional<PurchaseRequestLineItem> prli2=purchaseRequestLineItemRepository.findById(id);
-		assertEquals(prli2.get().getUserName(),"userName");
+//		Optional<PurchaseRequestLineItem> prli2=purchaseRequestLineItemRepository.findById(id);
+//		assertEquals(prli2.get().getUserName(),"userName");
 		
 		//Update the purchase request line items
-		prli2.get().setUserName("newUserName");
-		assertNotNull(purchaseRequestLineItemRepository.save(prli2.get()));
+//		prli2.get().setUserName("newUserName");
+//		assertNotNull(purchaseRequestLineItemRepository.save(prli2.get()));
 		
 		//Remove the purchase request line items
-		purchaseRequestLineItemRepository.delete(prli2.get());
-		assertThat(!(purchaseRequestLineItemRepository.findById(id)).isPresent());
+//		purchaseRequestLineItemRepository.delete(prli2.get());
+//		assertThat(!(purchaseRequestLineItemRepository.findById(id)).isPresent());
 	}
 }
