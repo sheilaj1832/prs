@@ -99,7 +99,7 @@ public class PurchaseRequestController {
 //			} catch (Exception ex) {
 //				return JsonResponse.getErrorInstance(ex.getMessage(), ex);
 //	}
-	}
+//}
 	@PostMapping("/Remove")
 	public @ResponseBody JsonResponse removePurchaseRequest(@RequestBody PurchaseRequest purchaseRequest) {
 		try {

@@ -7,6 +7,6 @@ import com.prs.business.user.User;
 
 public interface PurchaseRequestRepository extends CrudRepository<PurchaseRequest, Integer> {
 
-	PurchaseRequest findByUserAndStatusofReview(String user, String STATUS_OF_REVIEW);
+//	PurchaseRequest findByUserAndStatusofReview(String user, String STATUS_OF_REVIEW);
 
 }
