@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.prs.business.purchaserequest.PurchaseRequestLineItem;
 import com.prs.business.purchaserequest.PurchaseRequestLineItemRepository;
+import com.prs.business.purchaserequest.PurchaseRequestRepository;
 import com.prs.util.JsonResponse;
 
 @CrossOrigin 
@@ -26,6 +27,8 @@ public class PurchaseRequestLineItemController {
 	
 	@Autowired
 	private PurchaseRequestLineItemRepository purchaseRequestLineItemRepository;
+	@Autowired
+	private PurchaseRequestRepository purchaseRequestRepository;
 
 	@GetMapping("/List")
 	public @ResponseBody JsonResponse getAllPurchaseRequestLineItems() {
@@ -50,15 +53,22 @@ public class PurchaseRequestLineItemController {
 	}
 
 	@PostMapping("/Add")
-	public @ResponseBody JsonResponse addPurchaseRequestLineItem(@RequestBody PurchaseRequestLineItem purchaseRequestLineItem) {
-	
-		
-		
+	public @ResponseBody JsonResponse addNewPurchaseRequestLineItem(@RequestBody PurchaseRequestLineItem purchaseRequestLineItem) {
+		PurchaseRequestLineItem += purchaseRequestLineItem;
 		return savePurchaseRequestLineItem(purchaseRequestLineItem);
+		
 	}
 
 	@PostMapping("/Change")
 	public @ResponseBody JsonResponse updatePurchaseRequestLineItem(@RequestBody PurchaseRequestLineItem purchaseRequestLineItem) {
+	try {
+		purchaseRequestLineItemRepository.save(purchaseRequestLineItem);
+		updateRequestTotal(purchaseRequestLineItem);
+	}
+	catch (Exception e) {
+		
+		purchaseRequestLineItem = null;
+	}
 		return savePurchaseRequestLineItem(purchaseRequestLineItem);
 	}
 

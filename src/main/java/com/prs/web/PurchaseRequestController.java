@@ -28,15 +28,15 @@ public class PurchaseRequestController {
 	@Autowired
 	private PurchaseRequestRepository purchaseRequestRepository;
 
-	@GetMapping("/List")
-	public @ResponseBody JsonResponse getAllPurchaseRequests() {
+	@GetMapping("/ListReview")
+	public @ResponseBody JsonResponse getAllPurchaseRequestsForReview() {
 		try {
 			return JsonResponse.getInstance(purchaseRequestRepository.findAll());
 		} catch (Exception e) {
 			return JsonResponse.getErrorInstance("Purchase request list failure:" + e.getMessage(), e);
 		}
 	}
-
+	
 	@GetMapping("/Get/{id}")
 	public @ResponseBody JsonResponse getPurchaseRequest(@PathVariable int id) {
 		try {
@@ -70,7 +70,6 @@ public class PurchaseRequestController {
 			return JsonResponse.getErrorInstance(ex.getMessage(), ex);
 		}
 	}
-
 	@PostMapping("/SubmitForReview")
 	public @ResponseBody JsonResponse updatePurchaseRequestStatus(@RequestBody PurchaseRequest purchaseRequest) {
 		if (purchaseRequest.getTotal() <= 50) {
@@ -82,24 +81,19 @@ public class PurchaseRequestController {
 		return savePurchaseRequest(purchaseRequest);
 	}
 
-//	@GetMapping("/ApprovePurchaseRequest")
-//	public @ResponseBody JsonResponse reviewPurchaseRequests(@RequestBody PurchaseRequest purchaseRequest) {
-//		try {
-//			// approver canot approve their own requests!!
-//			// get all PRs with status of 'review' and user NOT equal to signed on user
-//			return JsonResponse.getInstance(purchaseRequestRepository.findAll(PurchaseRequest.STATUS_OF_REVIEW));
-//		} catch (Exception e) {
-//			return JsonResponse.getErrorInstance("PurchaseRequest list failure:" + e.getMessage(), e);
-//
-//			try {
-//				purchaseRequestRepository.save(purchaseRequest);
-//				return JsonResponse.getInstance(purchaseRequest);
-//			} catch (DataIntegrityViolationException ex) {
-//				return JsonResponse.getErrorInstance(ex.getRootCause().toString(), ex);
-//			} catch (Exception ex) {
-//				return JsonResponse.getErrorInstance(ex.getMessage(), ex);
-//	}
-//}
+
+	
+	@PostMapping("/ApprovePurchaseRequest")
+	public @ResponseBody JsonResponse approvePurchaseRequests(@RequestBody PurchaseRequest purchaseRequest) {
+		purchaseRequest.setStatus(PurchaseRequest.STATUS_OF_APPROVED);
+		return savePurchaseRequest(purchaseRequest);
+	}
+	@PostMapping("/RejectPurchaseRequest")
+	public @ResponseBody JsonResponse rejectPurchaseRequests(@RequestBody PurchaseRequest purchaseRequest) {
+		purchaseRequest.setStatus(PurchaseRequest.STATUS_OF_REJECTED);
+		return savePurchaseRequest(purchaseRequest);
+	}
+	
 	@PostMapping("/Remove")
 	public @ResponseBody JsonResponse removePurchaseRequest(@RequestBody PurchaseRequest purchaseRequest) {
 		try {
