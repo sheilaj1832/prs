@@ -72,17 +72,28 @@ public class PurchaseRequestLineItemController {
 
 	@PostMapping("/Change")
 	public @ResponseBody JsonResponse updatePurchaseRequestLineItem(@RequestBody PurchaseRequestLineItem prli) {
-	try {
-		prliRepository.save(prli);
-		updatePurchaseRequestTotal(prli);
+		JsonResponse jres = savePurchaseRequestLineItem(prli);
+		if (jres.getMessage().equals(JsonResponse.SUCCESS)) {
+			try {
+				updatePurchaseRequestTotal(prli);
+				return jres;
+			} catch (Exception ex) {
+				return JsonResponse.getErrorInstance(ex.getMessage(), ex);
+			}
+		} else {
+			return jres;
+		}
+	}	
+	@PostMapping("/Remove")
+	public @ResponseBody JsonResponse removePurchaseRequestLineItem(@RequestBody PurchaseRequestLineItem prli) {
+		try {
+			prliRepository.delete(prli);
+			updatePurchaseRequestTotal(prli);
+			return JsonResponse.getInstance(prli);
+		} catch (Exception ex) {
+			return JsonResponse.getErrorInstance(ex.getMessage(), ex);
+		}
 	}
-	catch (Exception e) {
-		
-		prli = null;
-	}
-		return savePurchaseRequestLineItem(prli);
-	}
-
 	private @ResponseBody JsonResponse savePurchaseRequestLineItem(@RequestBody PurchaseRequestLineItem prli) {
 		try {
 			prliRepository.save(prli);
@@ -94,15 +105,6 @@ public class PurchaseRequestLineItemController {
 		}
 	}
 
-	@PostMapping("/Remove")
-	public @ResponseBody JsonResponse removePurchaseRequestLineItem(@RequestBody PurchaseRequestLineItem prli) {
-		try {
-			prliRepository.delete(prli);
-			return JsonResponse.getInstance(prli);
-		} catch (Exception ex) {
-			return JsonResponse.getErrorInstance(ex.getMessage(), ex);
-		}
-	}
 
 	private void updatePurchaseRequestTotal(PurchaseRequestLineItem prli) throws Exception {
 		Optional<PurchaseRequest> optPR = prRepository.findById(prli.getPurchaseRequest().getId());		
