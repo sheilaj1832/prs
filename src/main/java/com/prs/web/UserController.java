@@ -42,10 +42,10 @@ public class UserController {
 			if (user.isPresent())
 				return JsonResponse.getInstance(user.get());
 			else
-				return JsonResponse.getErrorInstance("User not found for id: " + id, null);
-		} catch (Exception e) {
-			return JsonResponse.getErrorInstance("Error getting user:  " + e.getMessage(), null);
+				return JsonResponse.getErrorInstance("User not found for id: "+id);
 		}
+		catch (Exception e) {
+			return JsonResponse.getErrorInstance("Error getting user:  "+e.getMessage(), e);		}
 	}
 
 	@PostMapping("/Login")
@@ -55,8 +55,8 @@ public class UserController {
 			return JsonResponse.getInstance(u);
 			
 	} catch (Exception e) {
-		return JsonResponse.getErrorInstance("Error authenticating user:  " + e.getMessage(), null);
-		}
+		return JsonResponse.getErrorInstance("Error authenticating username:  "+user.getUserName() + ".  Exception msg: " + 
+				e.getMessage(), e);		}
 		
 	}
 	@PostMapping("/Add")

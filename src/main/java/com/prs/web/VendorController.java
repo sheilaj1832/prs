@@ -41,10 +41,10 @@ public class VendorController {
 			if (vendor.isPresent())
 				return JsonResponse.getInstance(vendor.get());
 			else
-				return JsonResponse.getErrorInstance("Vendor not found for id: " + id, null);
-		} catch (Exception e) {
-			return JsonResponse.getErrorInstance("Error getting vendor:  " + e.getMessage(), null);
+				return JsonResponse.getErrorInstance("Vendor not found for id: "+id);
 		}
+		catch (Exception e) {
+			return JsonResponse.getErrorInstance("Error getting vendor:  "+e.getMessage(), e);		}
 	}
 
 	@PostMapping("/Add")
